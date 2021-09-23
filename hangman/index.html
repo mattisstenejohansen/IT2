@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+
+    <!-- TODO: Vanskelighetsgrad -->
+
+    <!-- Referanse til Semantic-UI bibliotek -->
+    <link rel="stylesheet" type="text/css" href="semantic-ui/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="semantic-ui/semantic.min.js"></script>
+
+
+    <!-- CSS -->
+    <style media="screen">
+      h1: {
+        margin-left: 10px;
+      }
+    </style>
+
+    <!-- JavaScript Oppstart-->
+    <script type="text/javascript">
+      window.onload = oppstart;
+
+      function oppstart() {
+        var canvas = document.getElementById("canvas")
+        var ctx = document.getElementById("canvas").getContext("2d");
+
+        // vertikal stang
+        ctx.beginPath();
+        ctx.rect(75, 50, 2, 250);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        // horisontal stang
+        ctx.beginPath();
+        ctx.rect(75, 50, 100, 2);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+
+        // vertikal stang
+        ctx.beginPath();
+        ctx.rect(175, 50, 2, 50);
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+      }
+    </script>
+
+    <title>IT2 | HangMan</title>
+  </head>
+  <body style="background-color: black">
+
+    <!-- Oppgave tittel-->
+    <h1 class="ui inverted centered header" style="margin: 50px;">Hangman</h1>
+
+    <div class="root" style="margin: 50px;">
+
+      <!-- Sentrert segment -->
+
+      <div class="ui raised very padded text centered inverted container segment">
+
+        <div class="ui horizontal segments">
+          <div class="ui segment">
+            <h3 class="ui header">Poengsum</h3>
+            <h2 class="ui centered green header" id="poengsum"></h2>
+          </div>
+          <div class="ui segment">
+            <h3 class="ui header">Tid</h3>
+            <h2 classs="ui centered header" id="klokke"><span id="minutter">00</span>:<span id="sekunder">00</span></h2>
+          </div>
+          <div class="ui segment">
+            <h3 class="ui header">Vanskelighetsgrad</h3>
+            <h1 class="ui centered header" id="vanskelighetgrad"></h1>
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="ui centered segment">
+          <canvas id="canvas" width="300" height="300" style="background-color: white;"></canvas>
+        </div>
+
+        <div class="ui horizontal segments">
+          <div class="ui segment">
+              <!-- Standard knapp-->
+            <h3 class="ui header">Skriv inn en bokstav</h3>
+
+            <div class="ui action input">
+              <input type="text" placeholder="A, B, C..." id="input">
+              <button class="ui button" onclick="gjett()">Sjekk</button>
+            </div>
+          </div>
+          <div class="ui segment">
+            <h3 class="ui header">Ord</h3>
+            <h1 class="ui centered header" id="resultat"></h1>
+          </div>
+        </div>
+
+        <div id="feilmeldingDiv">
+          <h1 class="ui centered header" id="resultatMelding"></h1>
+        </div>
+
+      </div>
+
+
+    </div> <!-- Root div -->
+  </body>
+
+  </script>
+  <script type="text/javascript">
+
+    const ordbank = ["mattis", "fredrikstad", "test"]
+
+    var ord = []
+    var forsok = []
+    var antallForsok = 0
+    var feil = 0
+    var riktige = 0
+    var score = 0
+    var vanskelighetsgrad = ""
+    var vanskelighetsgradVis = document.getElementById('vanskelighetgrad')
+    var klokke = document.getElementById('klokke')
+    var poengsum = document.getElementById('poengsum')
+
+
+    // velg tilfeldig ord fra ordbank
+    var tilfeldigIndex =  Math.floor(Math.random() * ordbank.length);
+    console.log('tilfeldig index: ' + tilfeldigIndex);
+
+    ord = ordbank[tilfeldigIndex].split('')
+    console.log('tilfeldig ord:' + ord);
+
+    // velg og vis vanskelighetsgrad ut ifra lengden på ordet
+    if (ord.length < 5) {
+      vanskelighetsgrad = 'lett'
+      vanskelighetsgradVis.style.color = 'green'
+    } else if (ord.length >= 5 && ord.length < 10) {
+      vanskelighetsgrad = 'medium'
+      vanskelighetsgradVis.style.color = 'blue'
+    } else if (ord.length >= 10) {
+      vanskelighetsgrad = 'vanskelig'
+      vanskelighetsgradVis.style.color = 'red'
+    }
+    vanskelighetsgradVis.innerHTML = vanskelighetsgrad;
+    console.log('vanskelighetsgrad: ' + vanskelighetsgrad);
+
+
+    // vis innhold i "Ord" view
+    var resultatVis = document.getElementById("resultat")
+    var resultatInnholdStart = []
+
+    for (i in ord) {
+      resultatInnholdStart.push("_ ")
+    }
+
+    var tmpResultatInnhold = resultatInnholdStart.join(" ")
+    resultatVis.innerHTML = tmpResultatInnhold;
+
+    var resultatMelding = document.getElementById("resultatMelding")
+
+    function gjett() {
+
+      antallForsok = antallForsok + 1
+      var gjett = document.getElementById("input").value;
+
+      if (ord.includes(gjett) === true) {
+        score = score + 1
+
+        poengsum.innerHTML = score
+        var index = ord.indexOf(gjett)
+        console.log("index: " + index);
+
+        resultatInnholdStart.splice(index, 1, gjett)
+
+        // løser problem med samme bokstaver i ett ord
+        var antallGangerIArray = ord.filter(x => x == gjett).length;
+        console.log('antallGangerIArray: ' + antallGangerIArray);
+
+        for (i=0;i<ord.length;i++) {
+          if (ord[i] == gjett) {
+            console.log(i);
+            resultatInnholdStart.splice(i, 1, gjett)
+          }
+        }
+
+        tmpForsok = resultatInnholdStart.join(" ")
+        console.log("resultatInnholdStart: " + resultatInnholdStart);
+        console.log("ord: " + ord);
+
+        resultatVis.innerHTML = tmpForsok;
+
+
+        // Brukeren vinner
+        if (JSON.stringify(resultatInnholdStart) === JSON.stringify(ord)) {
+          resultatMelding.style.color = "green"
+          resultatMelding.innerHTML = "Gratulerer, du vant! <br> Score: " + score + "<br> Du brukte " + totalSekunder + " sekunder."
+          klokke.innerHTML = "00:00"
+
+
+        }
+
+
+        // hvis gjett ikke er en del av ordet
+      } else {
+        feil = feil + 1
+        score = score - 1
+        poengsum.innerHTML = score
+        console.log("feil: " + feil)
+      }
+
+
+      // hangman funksjonalitet
+      var canvas = document.getElementById("canvas")
+      var ctx = document.getElementById("canvas").getContext("2d");
+
+      switch (feil) {
+        case 1:
+          console.log("case 1")
+
+          // Hode
+          ctx.beginPath();
+          ctx.arc(175, 110, 15, 0, 15 * Math.PI);
+          ctx.fillStyle = "#E5AF90";
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "#E5AF90";
+          ctx.stroke();
+
+          break;
+
+        case 2:
+
+          console.log("case 2");
+
+          // kropp
+          ctx.beginPath();
+          ctx.rect(175, 127, 2, 50);
+          ctx.fillStyle = "#00B5E2";
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "#00B5E2";
+          ctx.stroke();
+
+          break;
+
+        case 3:
+
+          console.log("case 3");
+
+          // høyre arm
+          ctx.beginPath();
+
+          ctx.moveTo(178, 125);
+          ctx.lineTo(200, 150);
+
+          ctx.fillStyle = "#00B5E2";
+          ctx.fill();
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = "#00B5E2";
+          ctx.stroke();
+
+          break;
+
+        case 4:
+
+          console.log("case 4");
+
+          // venstre arm
+          ctx.beginPath();
+
+          ctx.moveTo(178, 125);
+          ctx.lineTo(150, 150);
+
+          ctx.fillStyle = "#00B5E2";
+          ctx.fill();
+          ctx.lineWidth = 3;
+          ctx.strokeStyle = "#00B5E2";
+          ctx.stroke();
+
+          break;
+
+
+          case 5:
+
+            console.log("case 5");
+
+            // venstre bein
+            ctx.beginPath();
+
+            ctx.moveTo(175, 175);
+            ctx.lineTo(160, 210);
+
+            ctx.fillStyle = "grey";
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "grey";
+            ctx.stroke();
+
+            break;
+
+          case 6:
+
+            console.log("case 6");
+
+            // høyre bein
+            ctx.beginPath();
+
+            ctx.moveTo(177, 175);
+            ctx.lineTo(190, 210);
+
+            ctx.fillStyle = "grey";
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = "grey";
+            ctx.stroke();
+
+            resultatMelding.style.color = "red"
+            resultatMelding.innerHTML = "Game Over!"
+
+            break;
+
+
+        default:
+
+      }
+    }
+
+    // klokke funksjon
+
+    var minutter = document.getElementById("minutter");
+    var sekunder = document.getElementById("sekunder");
+    var totalSekunder = 0;
+    setInterval(settTid, 1000);
+
+    function settTid() {
+      ++totalSekunder;
+      sekunder.innerHTML = pad(totalSekunder%60);
+      minutter.innerHTML = pad(parseInt(totalSekunder/60));
+    }
+
+    function pad(val) {
+      var valString = val + "";
+      if(valString.length < 2) {
+        return "0" + valString;
+      } else {
+        return valString;
+      }
+    }
+
+  </script>
+</html>
