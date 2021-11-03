@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+
+    <!-- Referanse til Semantic-UI bibliotek -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <!-- CSS -->
+    <style media="screen">
+        h1: {
+            margin-left: 10px;
+        }
+    </style>
+
+
+    <title> Oppgave 1</title>
+</head>
+
+<body style="background-color: black">
+
+    <h1 class="ui inverted centered header" style="margin: 50px;">Oppgave 1</h1>
+
+    <div class="root" style="margin: 50px;">
+
+        <div class="ui raised very padded text centered inverted container segment">
+            <h2 class="ui header">Beregner areal og viser sirkel basert på oppgitt radius.</h2>
+            <p>TIPS: bruk store verdier (eks. 100) i radius for større sirkler.</p>
+
+            <h1 class="ui header">Oppgi en radius:</h1>
+
+            <div class="ui input">
+                <input type="text" placeholder="radius" id="radiusOppgitt">
+            </div>
+
+            <br>
+
+            <button class="ui button" id="beregn" onclick="beregn()" style="margin-top: 10px;">Regn ut og vis
+                sirkel</button> <br><br>
+
+            <h3 class="ui header" id="arealResultat"></h3>
+            <!-- Canvas -->
+            <div class="ui centered inverted segment">
+                <canvas id="canvas" width="500" height="500" style="background-color: grey;"></canvas>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    function beregn() {
+
+        // A) 
+        var radius = document.getElementById("radiusOppgitt").value;
+
+        var areal = Math.PI * radius * radius
+
+        resultat = document.getElementById("arealResultat")
+        resultat.innerHTML = "Arealet blir: " + areal.toFixed(2) // Merk: antall desimaler er satt til 2
+
+        // B)
+
+        var canvas = document.getElementById("canvas")
+        var ctx = document.getElementById("canvas").getContext("2d");
+
+        ctx.beginPath();
+        ctx.arc(250, 250, radius, 0, radius * Math.PI);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "white";
+        ctx.stroke();
+
+    }
+</script>
+
+</html>

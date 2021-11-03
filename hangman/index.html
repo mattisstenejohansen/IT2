@@ -91,7 +91,7 @@
 
         <div class="ui horizontal segments">
           <div class="ui segment">
-              <!-- Standard knapp-->
+            <!-- Standard knapp-->
             <h3 class="ui header">Skriv inn en bokstav</h3>
 
             <div class="ui action input">
@@ -103,6 +103,10 @@
             <h3 class="ui header">Ord</h3>
             <h1 class="ui centered header" id="resultat"></h1>
           </div>
+        </div>
+
+        <div class="ui centered segment">
+          <h2 class="ui centered header" id="brukteBokstaver"></h2>
         </div>
 
         <div id="feilmeldingDiv">
@@ -118,7 +122,7 @@
   </script>
   <script type="text/javascript">
 
-    const ordbank = ["mattis", "fredrikstad", "test"]
+    const ordbank = ["soper", "kuse", "fitteslikker", "køllebank", "klamydiaspredder"]
 
     var ord = []
     var forsok = []
@@ -130,6 +134,11 @@
     var vanskelighetsgradVis = document.getElementById('vanskelighetgrad')
     var klokke = document.getElementById('klokke')
     var poengsum = document.getElementById('poengsum')
+
+
+    // Vis brukte bokstaver
+    var brukteBokstaverDiv = document.getElementById('brukteBokstaver')
+
 
 
     // velg tilfeldig ord fra ordbank

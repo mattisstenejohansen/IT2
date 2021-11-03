@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+
+  <!-- Referanse til Semantic-UI bibliotek -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+  <!-- CSS -->
+  <style media="screen">
+    h1: {
+      margin-left: 10px;
+    }
+  </style>
+
+  <title> Oppgave 2 versjon 1</title>
+</head>
+
+<body style="background-color: black">
+
+  <!-- Oppgave tittel-->
+  <h1 class="ui inverted centered header" style="margin: 50px;">Oppgave 2 versjon 2</h1>
+
+  <div class="root" style="margin: 50px;">
+
+    <!-- Sentrert segment -->
+    <div class="ui raised very padded text centered inverted container segment">
+      <h2 class="ui header">Bussbillett fra Fredrikstad til Oslo</h2>
+      <h3 class="ui header">Velg antall billetter:</h3>
+
+      <div class="ui input">
+        <input type="text" placeholder="Antall voksne" id="antallVoksne">
+      </div>
+      <p>pris: 200kr</p>
+
+      <button type="button" class="ui button" onclick="beregn()">Bestill</button>
+      <div class="ui header" id="ordrebekreftelse"></div>
+    </div>
+  </div> <!-- Root div -->
+
+</body>
+
+<script type="text/javascript">
+  function beregn() {
+
+    var antallVoksne = document.getElementById("antallVoksne").value;
+
+
+    var kost = 200 * antallVoksne
+
+    var ordrebekreftelse = document.getElementById("ordrebekreftelse")
+
+    ordrebekreftelse.innerHTML = "<h2> Samlet pris: " + kost + "</h2>"
+
+  }
+
+</script>
+
+</html>

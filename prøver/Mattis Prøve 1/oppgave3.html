@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+
+    <!-- Referanse til Semantic-UI bibliotek -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha512-8bHTC73gkZ7rZ7vpqUQThUDhqcNFyYi2xgDgPDHc+GXVGHXq+xPjynxIopALmOPqzo9JZj0k6OqqewdGO3EsrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha512-dqw6X88iGgZlTsONxZK9ePmJEFrmHwpuMrsUChjAw1mRUhUITE5QU9pkcSox+ynfLhL15Sv2al5A0LVyDCmtUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- CSS -->
+    <style media="screen">
+        h1: {
+            margin-left: 10px;
+        }
+    </style>
+
+
+    <title> Oppgave 3</title>
+</head>
+
+<body style="background-color: black">
+
+    <h1 class="ui inverted centered header" style="margin: 50px;">Oppgave 3</h1>
+
+    <div class="root" style="margin: 50px;">
+
+        <div class="ui raised very padded text centered inverted container segment">
+            <h2 class="ui header">Beregner n^2 når n er fra og med 1 til og med 10:</h2>
+
+            <div id="resultat"></div>
+
+        </div>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    var resultat = document.getElementById("resultat");
+
+    for (var i = 1; i <= 10; i++) {
+        var nyttElement = document.createElement("h4");
+        nyttElement.innerHTML = i + "^2: " + Math.pow(i, 2) + "<br>"
+        document.getElementById("resultat").appendChild(nyttElement);
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+    <!-- Referanse til Semantic-UI bibliotek -->
+    <link rel="stylesheet" type="text/css" href="semantic-ui/semantic.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="semantic-ui/semantic.min.js"></script>
+
+    <!-- CSS -->
+    <style media="screen">
+      h1: {
+        margin-left: 10px;
+      }
+    </style>
+
+    
+
+    <title>IT2 | Oppgave 9.4 </title>
+  </head>
+  <body style="background-color: black">
+
+    <!-- Oppgave tittel-->
+    <h1 class="ui inverted centered header" style="margin: 50px;">9.4: Reaksjonstid</h1>
+
+    <div class="root" style="margin: 50px;">
+      
+      <!-- Sentrert segment -->
+      <div class="ui raised very padded text centered inverted container segment">
+        <h2 class="ui header">Mål din reaksjonstid!</h2>
+        <p>Når fargen på sirkelen bytter farge, klikk på sirkelen så fort som mulig.</p>
+        <p>Pek musen din over sirkelen for å starte.</p>
+        <div class="ui inverted centered container segment">
+            <svg viewBox="0 0 500 500" width="300" height="300" style="margin-left: 120px">
+                <circle id="sirkel" fill="black" cx="184.582" cy="184.401" r="248.829" transform="matrix(1, 0, 0, 1.000593, 65.825089, 65.863319)"></circle>
+            </svg>
+        </div>
+        <h2 class="ui header" id="resultat">Reaksjonstid: <span id="reaksjonstidView"></span></h2>
+        <button type="button" class="ui button" onclick="restart()">Start på nytt</button>
+        <h2 class="ui header">Dine reaksjonstider: </h2>
+        <h3 class="ui header" id="reaksjonstidHistorie"></h3>
+      </div>
+    </div> <!-- Root div -->
+
+  </body>
+
+  <script type="text/javascript">
+
+    var sirkel = document.getElementById('sirkel');
+    var resultatMld = document.getElementById('reaksjonstidView')
+
+    var interval = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000]
+    var startTid = 0
+    var sluttTid = 0
+    var tilfeldigIndex = 0
+    var timeOut;
+
+    var tidligereReaksjoner = []
+    var reaksjonstidHistorie = document.getElementById('reaksjonstidHistorie')
+
+    // velg tilfeldig intervall, dette gir tilfeldig tid når fargen byttes
+    tilfeldigIndex =  Math.floor(Math.random() * interval.length);
+    console.log('tilfeldig index: ' + tilfeldigIndex);
+
+    
+
+    function byttFarge(){
+        sirkel.style.fill = "red"
+        var d1 = new Date();
+        startTid = d1.getTime(); 
+    }
+
+    sirkel.addEventListener("mouseover", function(){
+        console.log("startet");
+        timeOut = setTimeout(byttFarge, interval[tilfeldigIndex])
+    });
+
+    sirkel.addEventListener("click", function(){
+        if (sirkel.style.fill === "red") {
+            var d2 = new Date();
+            sluttTid = d2.getTime()
+            reaksjonstid = sluttTid - startTid
+            
+            // vis tid i sekunder dersom reaksjonstiden er større eller lik 1000 ms
+            if (reaksjonstid >= 1000){
+                reaksjonstid = reaksjonstid / 1000
+                reaksjonstid = reaksjonstid.toString() + "s"
+                resultatMld.innerHTML = reaksjonstid
+            } else {
+                reaksjonstid = reaksjonstid.toString() + "ms"
+                resultatMld.innerHTML = reaksjonstid
+            }
+            
+        } else {
+            // vis feilmelding
+            document.getElementById("resultat").innerHTML = "Du trykket for tidlig! Prøv på nytt "
+
+            clearTimeout(timeOut)
+        
+        }
+    }, false);
+
+    function restart() {
+
+        sirkel.style.fill = "black"
+        startTid, sluttTid, tilfeldigIndex = 0
+        resultatMld.innerHTML = ""
+
+        tilfeldigIndex = Math.floor(Math.random() * interval.length);
+        console.log("nytt tilfeldig index:" + tilfeldigIndex);
+
+        tidligereReaksjoner.push(reaksjonstid)
+        reaksjonstidHistorie.innerHTML = tidligereReaksjoner
+        
+
+    }
+
+
+  </script>
+</html>
+
+<!-- DEV TODO: -->
+<!-- * fiks feilmeldinger (ikke kritisk) fra Semantic UI (om integrity og jQuery)-->
